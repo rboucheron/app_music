@@ -1,11 +1,10 @@
-import {  useState, useRef } from "react";
-import { Play, Pause } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 import { AudioI } from "../interface/AudioI";
+import { FaPause, FaPlay } from "react-icons/fa";
 
 export interface AudioCardProps {
-
   src: string;
-  handlePlay: (isPlay: boolean) => void;
+  handlePlay: (audioElement: HTMLAudioElement) => void;
   handleProgress: (progressTime: number) => void;
   duration: (duration: number) => void;
   title: string;
@@ -13,12 +12,27 @@ export interface AudioCardProps {
   profil: string;
   audioImg: string;
   exportData: (data: AudioI) => void;
+  isPlay: (isPlay: boolean) => void;
 }
 
 const AudioCard = (props: AudioCardProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlay, setIsPlay] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener("play", () => setIsPlay(true));
+      audioRef.current.addEventListener("pause", () => setIsPlay(false));
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener("play", () => setIsPlay(true));
+        audioRef.current.removeEventListener("pause", () => setIsPlay(false));
+      }
+    };
+  }, []);
 
   const handleToggleAudio = () => {
     props.exportData({
@@ -30,13 +44,12 @@ const AudioCard = (props: AudioCardProps) => {
     if (audioRef.current) {
       if (isPlay) {
         audioRef.current.pause();
-     
       } else {
+        props.handlePlay(audioRef.current);
         audioRef.current.play();
       }
+      props.isPlay(!isPlay);
     }
-    setIsPlay(!isPlay);
-    props.handlePlay(!isPlay);
   };
 
   const handleTimeUpdate = () => {
@@ -68,35 +81,30 @@ const AudioCard = (props: AudioCardProps) => {
         <p className="absolute bottom-20 left-4 right-4 text-white text-sm z-20">
           {props.paragraph}
         </p>
-
-        <div className="absolute left-2 top-2 space-x-2 text-white text-sm z-20 flex items-center  ">
+        <div className="absolute left-2 top-2 space-x-2 text-white text-sm z-20 flex items-center">
           <img
             src={`https://api.dicebear.com/9.x/initials/svg?seed=${String(
               props.profil
             )}`}
-            className=" w-9 rounded-full"
+            className="w-9 rounded-full"
           />
           <p>{props.profil}</p>
         </div>
       </div>
       <button
         onClick={handleToggleAudio}
-        className={`absolute right-5 bottom-0 m-auto mb-4 w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center z-40 transition-opacity duration-300 ${
-          isHovered ? "opacity-100" : "opacity-0"
+        className={`absolute right-5 bottom-0 m-auto mb-4 w-12 h-12 bg-[#ff2f01] rounded-full flex items-center justify-center z-40 transition-opacity duration-300 ${
+          isHovered ? "opacity-100" : isPlay ? "opacity-100" : "opacity-0"
         }`}
       >
-        {isPlay ? (
-          <Pause className="w-6 h-6" color="white" />
-        ) : (
-          <Play className="w-6 h-6" color="white" />
-        )}
+        {isPlay ? <FaPause /> : <FaPlay />}
       </button>
       <audio
         src={props.src}
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
-      ></audio>
+      />
     </div>
   );
 };
