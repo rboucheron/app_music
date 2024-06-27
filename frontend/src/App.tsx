@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
-import AudioCard from "./component/AudioCard";
-import AudioNav from "./component/AudioNav";
-import { AudioI } from "./interface/AudioI";
+import { useState, useRef } from 'react';
+import AudioCard from './component/AudioCard';
+import AudioNav from './component/AudioNav';
+import { AudioI } from './interface/AudioI';
 
 function App() {
   const [duration, setDuration] = useState<number>(0);
@@ -52,7 +52,6 @@ function App() {
           exportData={(data: AudioI) => setAudioData(data)}
           isPlay={(value: boolean) => setIsPlay(value)}
         />
-        {/* Ajoutez d'autres composants AudioCard si nécessaire */}
       </div>
       {progressTime !== 0 && (
         <AudioNav
