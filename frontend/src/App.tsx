@@ -18,7 +18,7 @@ function App() {
 
   const fetchAudio = async () => {
     try {
-      const response = await useGet<AudioI[]>('/music');
+      const response = await useGet<AudioI[]>('music');
       setAudios(response);
     } catch (error) {
       console.error('Erreur lors de la récupération des audios:', error);

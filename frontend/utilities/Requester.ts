@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'localhost:3333/api/';
+const API_URL = 'http://localhost:3333/api/';
 
 
 const useGet = async <T>(path: string): Promise<T> => {
