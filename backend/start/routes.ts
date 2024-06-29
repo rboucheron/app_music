@@ -1,16 +1,16 @@
-/*
-|--------------------------------------------------------------------------
-| Routes file
-|--------------------------------------------------------------------------
-|
-| The routes file is used for defining the HTTP routes.
-|
-*/
-
 import router from '@adonisjs/core/services/router'
+import MusicController from '#controllers/music_controller'
 
-router.get('/', async () => {
-  return {
-    hello: 'world',
-  }
-})
+router
+  .group(() => {
+    router.get('/music', [MusicController, 'index'])
+
+    router.post('/music', [MusicController, 'store'])
+
+    router.get('/music/:id', [MusicController, 'show'])
+
+    router.put('/music/:id', [MusicController, 'update'])
+
+    router.delete('/music/:id', [MusicController, 'destroy'])
+  })
+  .prefix('/api')
