@@ -3,6 +3,7 @@ import AudioCard from './component/AudioCard';
 import AudioNav from './component/AudioNav';
 import { AudioI } from './interface/AudioI';
 import useGet from '../utilities/Requester';
+import Header from './component/Header';
 
 function App() {
   const [audios, setAudios] = useState<AudioI[]>([]);
@@ -52,6 +53,7 @@ function App() {
 
   return (
     <>
+    <Header />
       <div className="grid grid-cols-3">
         {audios.map((audio) => (
           <AudioCard

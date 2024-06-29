@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from "react";
-import { AudioI } from "../interface/AudioI";
-import { FaPause, FaPlay } from "react-icons/fa";
+import { useState, useRef, useEffect } from 'react';
+import { AudioI } from '../interface/AudioI';
+import { FaPause, FaPlay } from 'react-icons/fa';
 
 export interface AudioCardProps {
   src: string;
@@ -22,14 +22,14 @@ const AudioCard = (props: AudioCardProps) => {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.addEventListener("play", () => setIsPlay(true));
-      audioRef.current.addEventListener("pause", () => setIsPlay(false));
+      audioRef.current.addEventListener('play', () => setIsPlay(true));
+      audioRef.current.addEventListener('pause', () => setIsPlay(false));
     }
 
     return () => {
       if (audioRef.current) {
-        audioRef.current.removeEventListener("play", () => setIsPlay(true));
-        audioRef.current.removeEventListener("pause", () => setIsPlay(false));
+        audioRef.current.removeEventListener('play', () => setIsPlay(true));
+        audioRef.current.removeEventListener('pause', () => setIsPlay(false));
       }
     };
   }, []);
@@ -66,25 +66,25 @@ const AudioCard = (props: AudioCardProps) => {
 
   return (
     <div
-      className="relative w-auto h-96 m-4 rounded overflow-hidden shadow-lg"
+      className="relative m-4 h-96 w-auto overflow-hidden rounded shadow-lg"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <img
         src={props.audioImg}
-        className="w-full h-full object-cover absolute z-10"
+        className="absolute z-10 h-full w-full object-cover"
       />
-      <div className="absolute inset-0 bg-black bg-opacity-35 z-10">
-        <h1 className="absolute bottom-28 left-4 right-4 text-white text-4xl z-20">
+      <div className="absolute inset-0 z-10 bg-black bg-opacity-35">
+        <h1 className="absolute bottom-28 left-4 right-4 z-20 text-4xl text-white">
           {props.title}
         </h1>
-        <p className="absolute bottom-20 left-4 right-4 text-white text-sm z-20">
+        <p className="absolute bottom-20 left-4 right-4 z-20 text-sm text-white">
           {props.paragraph}
         </p>
-        <div className="absolute left-2 top-2 space-x-2 text-white text-sm z-20 flex items-center">
+        <div className="absolute left-2 top-2 z-20 flex items-center space-x-2 text-sm text-white">
           <img
             src={`https://api.dicebear.com/9.x/initials/svg?seed=${String(
-              props.profil
+              props.profil,
             )}`}
             className="w-9 rounded-full"
           />
@@ -93,8 +93,8 @@ const AudioCard = (props: AudioCardProps) => {
       </div>
       <button
         onClick={handleToggleAudio}
-        className={`absolute right-5 bottom-0 m-auto mb-4 w-12 h-12 bg-[#ff2f01] rounded-full flex items-center justify-center z-40 transition-opacity duration-300 ${
-          isHovered ? "opacity-100" : isPlay ? "opacity-100" : "opacity-0"
+        className={`absolute bottom-0 right-5 z-40 m-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#ff2f01] transition-opacity duration-300 ${
+          isHovered ? 'opacity-100' : isPlay ? 'opacity-100' : 'opacity-0'
         }`}
       >
         {isPlay ? <FaPause /> : <FaPlay />}

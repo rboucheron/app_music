@@ -2,7 +2,6 @@ import { HttpContext } from '@adonisjs/core/http'
 import Music from '#models/music'
 
 export default class MusicController {
-
   public async index({ response }: HttpContext) {
     try {
       const music = await Music.all()

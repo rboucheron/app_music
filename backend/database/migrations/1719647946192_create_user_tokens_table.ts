@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.text('token').notNullable
       table
-        .integer('user-id')
+        .integer('user_id')
         .unsigned()
         .references('id')
         .inTable('users')

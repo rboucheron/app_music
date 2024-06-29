@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
-        .integer('user-id')
+        .integer('user_id')
         .unsigned()
         .references('id')
         .inTable('users')
@@ -15,7 +15,7 @@ export default class extends BaseSchema {
         .onUpdate('CASCADE')
 
       table
-        .integer('music-id')
+        .integer('music_id')
         .unsigned()
         .references('id')
         .inTable('music')
