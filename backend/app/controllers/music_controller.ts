@@ -16,7 +16,7 @@ export default class MusicController {
     try {
       const data = request.only(['musicUrl', 'imageUrl', 'title', 'paragraph'])
       const music = await Music.create(data)
-      response.status(201).json(data )
+      response.status(201).json(music)
     } catch (error) {
       response.status(500).json({ message: 'Error creating music record', error })
     }

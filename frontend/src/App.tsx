@@ -1,14 +1,29 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import AudioCard from './component/AudioCard';
 import AudioNav from './component/AudioNav';
 import { AudioI } from './interface/AudioI';
+import useGet from '../utilities/Requester';
 
 function App() {
+  const [audios, setAudios] = useState<AudioI[]>([]);
   const [duration, setDuration] = useState<number>(0);
   const [progressTime, setProgressTime] = useState<number>(0);
   const [isPlay, setIsPlay] = useState<boolean>(false);
   const [audioData, setAudioData] = useState<AudioI | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    fetchAudio();
+  }, []);
+
+  const fetchAudio = async () => {
+    try {
+      const response = await useGet<AudioI[]>('/music');
+      setAudios(response);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des audios:', error);
+    }
+  };
 
   const handlePlayButtonClick = () => {
     if (audioRef.current) {
@@ -38,20 +53,21 @@ function App() {
   return (
     <>
       <div className="grid grid-cols-3">
-        <AudioCard
-          src="https://ia801306.us.archive.org/21/items/13-beg-forgiveness/03-paid.mp3"
-          title="Vultures"
-          paragraph="lorem ipsum indolor solor uska"
-          profil="YE & Ty dolla sign"
-          audioImg="https://ia801306.us.archive.org/21/items/13-beg-forgiveness/front-cover.jpeg"
-          handlePlay={(audioElement: HTMLAudioElement) =>
-            handleAudioCardPlay(audioElement)
-          }
-          handleProgress={setProgressTime}
-          duration={setDuration}
-          exportData={(data: AudioI) => setAudioData(data)}
-          isPlay={(value: boolean) => setIsPlay(value)}
-        />
+        {audios.map((audio) => (
+          <AudioCard
+            key={audio.id}
+            src={audio.musicUrl}
+            title={audio.title}
+            paragraph={audio.paragraph}
+            profil={audio.profil}
+            audioImg={audio.imageUrl}
+            handlePlay={handleAudioCardPlay}
+            handleProgress={setProgressTime}
+            duration={setDuration}
+            exportData={setAudioData}
+            isPlay={setIsPlay}
+          />
+        ))}
       </div>
       {progressTime !== 0 && (
         <AudioNav

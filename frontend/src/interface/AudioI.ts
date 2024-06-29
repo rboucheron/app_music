@@ -1,6 +1,8 @@
 export interface AudioI {
+  id: string 
   title: string;
-  image?: string;
+  imageUrl: string;
+  musicUrl: string; 
   profil: string;
   paragraph: string;
 }
