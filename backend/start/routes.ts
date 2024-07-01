@@ -1,19 +1,18 @@
 import router from '@adonisjs/core/services/router'
 import MusicController from '#controllers/music_controller'
-import UsersController from '#controllers/users_controller'
+import AuthController from '#controllers/auth_controller'
 
 router
   .group(() => {
     router.get('/music', [MusicController, 'index'])
-
     router.post('/music', [MusicController, 'store'])
-
     router.get('/music/:id', [MusicController, 'show'])
-
     router.put('/music/:id', [MusicController, 'update'])
-
-    router.post('/user/creat', [UsersController, 'creat'])
-
-    router.post('/user/auth', [UsersController, 'connect'])
+    router
+      .group(() => {
+        router.post('/register', [AuthController, 'register'])
+        router.post('/login', [AuthController, 'login'])
+      })
+      .prefix('/auth')
   })
   .prefix('/api')

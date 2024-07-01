@@ -9,9 +9,9 @@ export default class extends BaseSchema {
       table.string('full_name').nullable()
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
-      table.text('image_url').nullable()
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+
+      table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
+      table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })
   }
 
