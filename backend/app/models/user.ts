@@ -36,5 +36,16 @@ export default class User extends compose(BaseModel, AuthFinder) {
     }
   }
 
+  public static async verifyCredentials(email: string, password: string) {
+    const user = await this.findBy('email', email)
+    if (!user) {
+      return null
+    }
+    const isPasswordValid = await Hash.verify(user.password, password)
+    return isPasswordValid ? user : null
+  }
+
+
   static accessTokens = DbAccessTokensProvider.forModel(User)
 }
+
