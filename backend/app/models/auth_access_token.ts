@@ -31,7 +31,7 @@ export default class AuthAccessToken extends BaseModel {
 
   public static async verifyToken(token: string) {
     const accessToken = await this.findBy('token', token)
-    if (accessToken !== null && accessToken.expiresAt !== DateTime.now()) {
+    if (accessToken !== null && accessToken.expiresAt >= DateTime.now()) {
       return accessToken
     } else {
       return null
