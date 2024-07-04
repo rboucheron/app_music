@@ -8,6 +8,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import generateToken from '../utilities/generate_token.js'
 
 export default class AuthController {
+
   public async register({ request, response }: HttpContext) {
     const data = await request.validateUsing(authRegisterSchema)
     await User.create(data)
