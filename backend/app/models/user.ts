@@ -1,16 +1,9 @@
 import { DateTime } from 'luxon'
-import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, beforeSave, column } from '@adonisjs/lucid/orm'
-import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import Hash from '@adonisjs/core/services/hash'
+import hashPassword, { verifyPassword } from '../utilities/hash_password.js'
 
-const AuthFinder = withAuthFinder(() => Hash.use('scrypt'), {
-  uids: ['email'],
-  passwordColumnName: 'password',
-})
-
-export default class User extends compose(BaseModel, AuthFinder) {
+export default class User extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
@@ -20,7 +13,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare email: string
 
-  @column({ serializeAs: null })
+  @column()
   declare password: string
 
   @column.dateTime({ autoCreate: true })
@@ -30,9 +23,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
   @beforeSave()
-  public static async hashPassword (user: User){
-    if(user.$dirty.password){
-      user.password = await Hash.make(user.password)
+  public static async hashPassword(user: User) {
+    if (user.$dirty.password) {
+      user.password = await hashPassword(user.password)
     }
   }
 
@@ -41,11 +34,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
     if (!user) {
       return null
     }
-    const isPasswordValid = await Hash.verify(user.password, password)
-    return isPasswordValid ? user : null
+    const isCorrectPassword = await verifyPassword(user.password, password)
+    if (isCorrectPassword) {
+      return user
+    } else {
+      return null
+    }
   }
-
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
 }
-
